@@ -19,10 +19,6 @@ A clean, modern portfolio website built with Next.js and Tailwind CSS, featuring
 
 ## 📦 Getting Started
 
-\`\`\`bash
-# Clone the repository
-git clone https://github.com/felixmacaspac/v0-minimalist-portfolio.git
-
 # Install dependencies
 npm install
 
