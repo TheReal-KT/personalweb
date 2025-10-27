@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import CircleCursor from "@/components/circle-cursor"
+import Image from "next/image"
 
 export default function Home() {
   const [isDark, setIsDark] = useState(true)
@@ -68,9 +69,7 @@ export default function Home() {
                 <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
                 <div className="flex items-center gap-6">
                   <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-border overflow-hidden flex-shrink-0 bg-muted">
-                    <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-xs">
-                      Photo
-                    </div>
+                    <Image src="/KT_suit.jpg" alt="Khuluza Tshabalala" fill className="object-cover" sizes="80px" priority />
                   </div>
                   <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
                     Khuluza
@@ -103,7 +102,6 @@ export default function Home() {
                 <div className="text-sm text-muted-foreground font-mono">CURRENTLY</div>
                 <div className="space-y-2">
                   <div className="text-foreground">Full Stack Developer</div>
-                  <div className="text-muted-foreground">@ Hububble</div>
                   <div className="text-xs text-muted-foreground">2024 — Present</div>
                 </div>
               </div>
@@ -111,7 +109,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground font-mono">FOCUS</div>
                 <div className="flex flex-wrap gap-2">
-                  {["React", "TypeScript", "Node.js", "Vercel", "Next.js", "Supabase", ""].map((skill) => (
+                  {["React", "TypeScript", "Node.js", "Vercel", "Next.js", "Supabase"].map((skill) => (
                     <span
                       key={skill}
                       className="px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-colors duration-300"
@@ -297,10 +295,8 @@ export default function Home() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { name: "GitHub", handle: "@felixmacaspac", url: "#" },
-                  { name: "v0.dev", handle: "@felixmacaspac", url: "#" },
-                  { name: "HubSpot Community", handle: "@felixmacaspac", url: "#" },
-                  { name: "LinkedIn", handle: "felixmacaspac", url: "#" },
+                  { name: "GitHub", handle: "TheReal-KT", url: "https://github.com/TheReal-KT" },
+                  { name: "LinkedIn", handle: "Khuluza Tshabalala", url: "https://www.linkedin.com/in/khuluza-tshabalala-933161288/" },
                 ].map((social) => (
                   <Link
                     key={social.name}
