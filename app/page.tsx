@@ -1,124 +1,252 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Blocks,
+  Bot,
+  BriefcaseBusiness,
+  Github,
+  Linkedin,
+  Mail,
+  MapPin,
+  Radar,
+  Sparkles,
+  Workflow,
+} from "lucide-react"
 import CircleCursor from "@/components/circle-cursor"
-import Image from "next/image"
+
+const sections = [
+  { id: "home", label: "Start" },
+  { id: "language", label: "Language" },
+  { id: "projects", label: "Projects" },
+  { id: "contact", label: "Contact" },
+]
+
+const focusAreas = ["Agent workflows", "Product systems", "UI direction", "Fast iteration"]
+
+const designPrinciples = [
+  {
+    title: "Readable pressure",
+    description: "Strong hierarchy, deliberate spacing, and clear blocks make the work legible even when the content is dense.",
+    icon: Sparkles,
+  },
+  {
+    title: "Signal over noise",
+    description: "Color is reserved for status, emphasis, and action. Decorative moves stay subtle and support the narrative.",
+    icon: Radar,
+  },
+  {
+    title: "Product-first storytelling",
+    description: "Every section explains what is being built, why it matters, and what kind of systems thinking sits behind it.",
+    icon: Workflow,
+  },
+]
+
+const projects = [
+  {
+    name: "Friday Agent",
+    category: "Personal AI operator",
+    status: "Active build",
+    description:
+      "A focused agent for turning loose commitments, notes, and priorities into a clear execution plan for the week.",
+    emphasis: "Built to reduce context switching and make planning feel operational instead of aspirational.",
+    tech: ["Next.js", "TypeScript", "AI workflows"],
+    accent: "signal",
+    icon: Bot,
+  },
+  {
+    name: "DRAFT Agentic Dashboard",
+    category: "Control surface",
+    status: "Design + implementation",
+    description:
+      "An agentic dashboard for watching prompts, state, and workflow outcomes in one place instead of treating automation like a black box.",
+    emphasis: "The goal is a usable operator view for agent systems, not another demo-only interface.",
+    tech: ["Dashboard UX", "State design", "Agent orchestration"],
+    accent: "accent",
+    icon: Blocks,
+  },
+  {
+    name: "BLVNK",
+    category: "Product work",
+    status: "Ongoing",
+    description:
+      "Minimal by design here: focused product execution across flows, integrations, and internal delivery surfaces.",
+    emphasis: "This stays concise on the site while still showing the product lane I am actively shipping in.",
+    tech: ["Product delivery", "Integrations", "Operations"],
+    accent: "foreground",
+    icon: BriefcaseBusiness,
+  },
+  {
+    name: "Discovery GradHack Hackathon",
+    category: "Live sprint",
+    status: "Current event",
+    description:
+      "A fast-moving build environment where I can pressure-test product instincts, prototype quickly, and collaborate under a hard deadline.",
+    emphasis: "Hackathon work sharpens speed, clarity, and the ability to turn rough ideas into something demoable.",
+    tech: ["Rapid prototyping", "Team build", "Presentation"],
+    accent: "signal",
+    icon: Sparkles,
+  },
+]
+
+const operatingModes = [
+  "Define the product edge before touching polish.",
+  "Build interfaces that expose system state clearly.",
+  "Keep momentum visible with tangible deliverables instead of vague progress.",
+]
+
+const links = [
+  {
+    label: "Email",
+    value: "khuluza0@gmail.com",
+    href: "mailto:khuluza0@gmail.com",
+    icon: Mail,
+  },
+  {
+    label: "GitHub",
+    value: "TheReal-KT",
+    href: "https://github.com/TheReal-KT",
+    icon: Github,
+  },
+  {
+    label: "LinkedIn",
+    value: "Khuluza Tshabalala",
+    href: "https://www.linkedin.com/in/khuluza-tshabalala-933161288/",
+    icon: Linkedin,
+  },
+]
 
 export default function Home() {
-  const [isDark, setIsDark] = useState(true)
-  const [activeSection, setActiveSection] = useState("")
+  const [activeSection, setActiveSection] = useState("home")
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark)
-  }, [isDark])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in-up")
+            entry.target.classList.add("section-visible")
             setActiveSection(entry.target.id)
           }
         })
       },
-      { threshold: 0.3, rootMargin: "0px 0px -20% 0px" },
+      { threshold: 0.3, rootMargin: "0px 0px -15% 0px" },
     )
 
     sectionsRef.current.forEach((section) => {
-      if (section) observer.observe(section)
+      if (section) {
+        observer.observe(section)
+      }
     })
 
     return () => observer.disconnect()
   }, [])
 
-  const toggleTheme = () => {
-    setIsDark(!isDark)
-  }
-
   return (
-    <div className="min-h-screen bg-background text-foreground relative">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <CircleCursor />
 
-      <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
-        <div className="flex flex-col gap-4">
-          {["intro", "work", "thoughts", "connect"].map((section) => (
+      <div className="pointer-events-none fixed inset-0">
+        <div className="grid-overlay absolute inset-0" />
+        <div className="absolute left-[-8rem] top-24 h-72 w-72 rounded-full bg-signal/12 blur-3xl" />
+        <div className="absolute right-[-6rem] top-[38rem] h-80 w-80 rounded-full bg-accent/12 blur-3xl" />
+      </div>
+
+      <nav className="fixed left-5 top-1/2 z-20 hidden -translate-y-1/2 xl:block">
+        <div className="panel flex flex-col gap-2 p-2">
+          {sections.map((section) => (
             <button
-              key={section}
-              onClick={() => document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })}
-              className={`w-2 h-8 rounded-full transition-all duration-500 ${
-                activeSection === section ? "bg-foreground" : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
-              }`}
-              aria-label={`Navigate to ${section}`}
-            />
+              key={section.id}
+              type="button"
+              onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              className={`nav-pill ${activeSection === section.id ? "nav-pill-active" : ""}`}
+              aria-current={activeSection === section.id ? "true" : undefined}
+            >
+              {section.label}
+            </button>
           ))}
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
+      <main className="relative mx-auto flex max-w-6xl flex-col gap-8 px-5 pb-12 pt-5 sm:px-8 lg:px-12">
         <header
-          id="intro"
+          id="home"
           ref={(el) => {
             sectionsRef.current[0] = el
           }}
-          className="min-h-screen flex items-center opacity-0"
+          className="section-hidden min-h-screen scroll-mt-24 pt-20"
         >
-          <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
-            <div className="lg:col-span-3 space-y-6 sm:space-y-8">
-              <div className="space-y-3 sm:space-y-2">
-                <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
-                <div className="flex items-center gap-6">
-                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-border overflow-hidden flex-shrink-0 bg-muted">
-                    <Image src="/KT_suit.jpg" alt="Khuluza Tshabalala" fill className="object-cover" sizes="80px" priority />
-                  </div>
-                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
-                    Khuluza
-                    <br />
-                    <span className="text-muted-foreground">Tshabalala</span>
+          <div className="grid gap-6 lg:grid-cols-[1.45fr_0.9fr]">
+            <div className="panel flex min-h-[38rem] flex-col justify-between gap-12 p-8 sm:p-10 lg:p-12">
+              <div className="space-y-6">
+                <div className="eyebrow">Personal Web / 2026 refresh</div>
+                <div className="space-y-5">
+                  <p className="font-mono text-xs uppercase tracking-[0.28em] text-muted-foreground">Khuluza Tshabalala</p>
+                  <h1 className="max-w-4xl font-display text-5xl leading-[0.95] sm:text-6xl lg:text-8xl">
+                    Building agentic products that stay clear under pressure.
                   </h1>
                 </div>
+                <p className="max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+                  I design and ship full-stack experiences around AI workflows, product systems, and fast-moving delivery.
+                  Right now the work is anchored in Friday, DRAFT, a minimal BLVNK lane, and the Discovery GradHack
+                  Hackathon sprint.
+                </p>
               </div>
 
-              <div className="space-y-6 max-w-md">
-                <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                  Full-Stack Developer building wonderful applications to do wonderful things
-                  <span className="text-foreground"> design</span>,<span className="text-foreground"> technology</span>,
-                  and
-                  <span className="text-foreground"> user experience</span>.
-                </p>
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Link href="#projects" className="primary-link">
+                    See current projects
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link href="#contact" className="secondary-link">
+                    Start a conversation
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    Available for work
+                <div className="flex flex-wrap gap-3">
+                  <div className="chip">
+                    <MapPin className="h-3.5 w-3.5" />
+                    South Africa
                   </div>
-                  <div>South Africa</div>
+                  <div className="chip">
+                    <span className="signal-dot" />
+                    Available for product and engineering collaboration
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
-              <div className="space-y-4">
-                <div className="text-sm text-muted-foreground font-mono">CURRENTLY</div>
-                <div className="space-y-2">
-                  <div className="text-foreground">Full Stack Developer</div>
-                  <div className="text-xs text-muted-foreground">2024 — Present</div>
+            <div className="grid gap-6">
+              <div className="panel overflow-hidden p-5">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] border border-border/70 bg-muted">
+                  <Image src="/KT_suit.jpg" alt="Khuluza Tshabalala" fill className="object-cover" priority sizes="(min-width: 1024px) 28rem, 100vw" />
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="text-sm text-muted-foreground font-mono">FOCUS</div>
+              <div className="panel p-6">
+                <div className="mb-5 flex items-center justify-between">
+                  <div className="eyebrow">Current focus</div>
+                  <div className="font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">4 active tracks</div>
+                </div>
                 <div className="flex flex-wrap gap-2">
-                  {["React", "TypeScript", "Node.js", "Vercel", "Next.js", "Supabase"].map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-colors duration-300"
-                    >
-                      {skill}
+                  {focusAreas.map((area) => (
+                    <span key={area} className="chip">
+                      {area}
                     </span>
                   ))}
+                </div>
+                <div className="mt-6 rounded-[1.5rem] border border-border/70 bg-background/80 p-5">
+                  <div className="font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">Build stance</div>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                    Clear interfaces, visible status, and product decisions that feel grounded in real usage instead of
+                    portfolio filler.
+                  </p>
                 </div>
               </div>
             </div>
@@ -126,264 +254,195 @@ export default function Home() {
         </header>
 
         <section
-          id="work"
+          id="language"
           ref={(el) => {
             sectionsRef.current[1] = el
           }}
-          className="min-h-screen py-20 sm:py-32 opacity-0"
+          className="section-hidden scroll-mt-24 py-8 sm:py-12"
         >
-          <div className="space-y-12 sm:space-y-16">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <h2 className="text-3xl sm:text-4xl font-light">Selected Work</h2>
-              <div className="text-sm text-muted-foreground font-mono">2024 — 2025</div>
+          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="space-y-3">
+              <div className="eyebrow">Design language</div>
+              <h2 className="max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
+                Editorial structure, product signals, and enough motion to keep the page alive.
+              </h2>
             </div>
-
-            <div className="space-y-8 sm:space-y-12">
-              {[
-                {
-                  year: "2025",
-                  role: "Hackathon Participant",
-                  company: "Tech Innovation Summit",
-                  description:
-                    "Competed in a 48-hour hackathon, building innovative solutions with a cross-functional team.",
-                  tech: ["React", "Next.js", "AI SDK"],
-                },
-                {
-                  year: "2024",
-                  role: "Software Engineer",
-                  company: "Journey Begins",
-                  description:
-                    "Started my software engineering journey, learning modern web development and building real-world projects.",
-                  tech: ["JavaScript", "React", "TypeScript"],
-                },
-              ].map((job, index) => (
-                <div
-                  key={index}
-                  className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-border transition-colors duration-500"
-                >
-                  <div className="lg:col-span-2">
-                    <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
-                      {job.year}
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-6 space-y-3">
-                    <div>
-                      <h3 className="text-lg sm:text-xl font-medium">{job.role}</h3>
-                      <div className="text-muted-foreground">{job.company}</div>
-                    </div>
-                    <p className="text-muted-foreground leading-relaxed max-w-lg">{job.description}</p>
-                  </div>
-
-                  <div className="lg:col-span-4 flex flex-wrap gap-2 lg:justify-end mt-2 lg:mt-0">
-                    {job.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-colors duration-500"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p className="max-w-xl text-sm leading-7 text-muted-foreground sm:text-base">
+              The site now behaves like a product logbook: large statements, compact evidence, and a visual system that
+              makes active work feel intentional.
+            </p>
           </div>
-        </section>
 
-        <section
-          id="thoughts"
-          ref={(el) => {
-            sectionsRef.current[2] = el
-          }}
-          className="min-h-screen py-20 sm:py-32 opacity-0"
-        >
-          <div className="space-y-12 sm:space-y-16">
-            <h2 className="text-3xl sm:text-4xl font-light">Recent Thoughts</h2>
-
-            <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
-              {[
-                {
-                  title: "The Future of Web Development",
-                  excerpt: "Exploring how AI and automation are reshaping the way we build for the web.",
-                  date: "Dec 2024",
-                  readTime: "5 min",
-                },
-                {
-                  title: "Design Systems at Scale",
-                  excerpt: "Lessons learned from building and maintaining design systems across multiple products.",
-                  date: "Nov 2024",
-                  readTime: "8 min",
-                },
-                {
-                  title: "Performance-First Development",
-                  excerpt: "Why performance should be a first-class citizen in your development workflow.",
-                  date: "Oct 2024",
-                  readTime: "6 min",
-                },
-                {
-                  title: "The Art of Code Review",
-                  excerpt: "Building better software through thoughtful and constructive code reviews.",
-                  date: "Sep 2024",
-                  readTime: "4 min",
-                },
-              ].map((post, index) => (
-                <article
-                  key={index}
-                  className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
-                      <span>{post.date}</span>
-                      <span>{post.readTime}</span>
-                    </div>
-
-                    <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
-                      {post.title}
-                    </h3>
-
-                    <p className="text-muted-foreground leading-relaxed">{post.excerpt}</p>
-
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                      <span>Read more</span>
-                      <svg
-                        className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </div>
-                  </div>
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="grid gap-6 md:grid-cols-3">
+              {designPrinciples.map((principle) => (
+                <article key={principle.title} className="project-card p-6">
+                  <principle.icon className="h-5 w-5 text-signal" />
+                  <h3 className="mt-5 font-display text-2xl">{principle.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">{principle.description}</p>
                 </article>
               ))}
             </div>
+
+            <aside className="panel p-6 sm:p-8">
+              <div className="eyebrow">System tokens</div>
+              <div className="mt-6 space-y-6">
+                <div>
+                  <div className="font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">Palette</div>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                    Warm paper base, deep ink foreground, cobalt for system signal, and a restrained orange for emphasis.
+                  </p>
+                </div>
+                <div>
+                  <div className="font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">Typography</div>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                    Expressive display type for the big ideas, quieter body copy for reading, and mono labels for metadata.
+                  </p>
+                </div>
+                <div>
+                  <div className="font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">Motion</div>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                    Sections rise in on scroll, cards lift on hover, and the cursor only appears on devices that support fine
+                    pointer interaction.
+                  </p>
+                </div>
+              </div>
+            </aside>
           </div>
         </section>
 
         <section
-          id="connect"
+          id="projects"
           ref={(el) => {
-            sectionsRef.current[3] = el
+            sectionsRef.current[2] = el
           }}
-          className="py-20 sm:py-32 opacity-0"
+          className="section-hidden scroll-mt-24 py-8 sm:py-12"
         >
-          <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
-            <div className="space-y-6 sm:space-y-8">
-              <h2 className="text-3xl sm:text-4xl font-light">Let's Connect</h2>
+          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="space-y-3">
+              <div className="eyebrow">Current projects</div>
+              <h2 className="max-w-3xl font-display text-4xl leading-tight sm:text-5xl">The things I am actively building right now.</h2>
+            </div>
+            <p className="max-w-xl text-sm leading-7 text-muted-foreground sm:text-base">
+              These are the live lanes shaping the portfolio at the moment, from agent workflows to shipping product work and
+              hackathon execution.
+            </p>
+          </div>
 
-              <div className="space-y-6">
-                <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                  Always interested in new opportunities, collaborations, and conversations about technology and design.
-                </p>
-
-                <div className="space-y-4">
-                  <Link
-                    href="mailto:test@example.com"
-                    className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
-                  >
-                    <span className="text-base sm:text-lg">khuluza0@gmail.com</span>
-                    <svg
-                      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </Link>
+          <div className="grid gap-6 lg:grid-cols-2">
+            {projects.map((project) => (
+              <article key={project.name} className="project-card p-6 sm:p-8">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="eyebrow">{project.category}</div>
+                    <h3 className="mt-5 font-display text-3xl sm:text-[2rem]">{project.name}</h3>
+                  </div>
+                  <project.icon className={`h-6 w-6 ${project.accent === "accent" ? "text-accent" : project.accent === "signal" ? "text-signal" : "text-foreground"}`} />
                 </div>
-              </div>
-            </div>
 
-            <div className="space-y-6 sm:space-y-8">
-              <div className="text-sm text-muted-foreground font-mono">ELSEWHERE</div>
+                <div className="mt-5">
+                  <span className="inline-flex rounded-full bg-signal-soft px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] text-signal">
+                    {project.status}
+                  </span>
+                </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { name: "GitHub", handle: "TheReal-KT", url: "https://github.com/TheReal-KT" },
-                  { name: "LinkedIn", handle: "Khuluza Tshabalala", url: "https://www.linkedin.com/in/khuluza-tshabalala-933161288/" },
-                ].map((social) => (
-                  <Link
-                    key={social.name}
-                    href={social.url}
-                    className="group p-4 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
-                  >
-                    <div className="space-y-2">
-                      <div className="text-foreground group-hover:text-muted-foreground transition-colors duration-300">
-                        {social.name}
-                      </div>
-                      <div className="text-sm text-muted-foreground">{social.handle}</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
+                <p className="mt-5 text-base leading-8 text-muted-foreground">{project.description}</p>
+                <p className="mt-4 text-sm leading-7 text-foreground/82">{project.emphasis}</p>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {project.tech.map((item) => (
+                    <span key={item} className="chip">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
-        <footer className="py-12 sm:py-16 border-t border-border">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8">
-            <div className="space-y-2">
-              <div className="text-sm text-muted-foreground">© 2025 Khuluza Tshabalala. All rights reserved.</div>
+        <section className="grid gap-6 py-8 sm:py-12 lg:grid-cols-[1fr_1.1fr]">
+          <article className="panel p-6 sm:p-8">
+            <div className="eyebrow">Operating mode</div>
+            <h2 className="mt-5 max-w-xl font-display text-4xl leading-tight">How I am structuring the work right now.</h2>
+            <div className="mt-6 space-y-4">
+              {operatingModes.map((mode, index) => (
+                <div key={mode} className="flex gap-4 rounded-[1.4rem] border border-border/70 bg-background/70 p-4">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-card font-mono text-xs text-muted-foreground">
+                    0{index + 1}
+                  </div>
+                  <p className="text-sm leading-7 text-muted-foreground">{mode}</p>
+                </div>
+              ))}
             </div>
+          </article>
 
-            <div className="flex items-center gap-4">
-              <button
-                onClick={toggleTheme}
-                className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
-                aria-label="Toggle theme"
-              >
-                {isDark ? (
-                  <svg
-                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                  </svg>
-                )}
-              </button>
+          <article className="panel p-6 sm:p-8">
+            <div className="eyebrow">What changed</div>
+            <h2 className="mt-5 max-w-2xl font-display text-4xl leading-tight">This version of the site is now aligned to live work instead of placeholder portfolio content.</h2>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
+              The refresh replaces generic experience and thought sections with a clearer picture of what I am actually shipping:
+              agent systems, product execution, and collaborative build environments.
+            </p>
+          </article>
+        </section>
 
-              <button className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300">
-                <svg
-                  className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-              </button>
-            </div>
+        <section
+          id="contact"
+          ref={(el) => {
+            sectionsRef.current[3] = el
+          }}
+          className="section-hidden scroll-mt-24 py-8 sm:py-12"
+        >
+          <div className="grid gap-6 lg:grid-cols-[1fr_1.1fr]">
+            <article className="panel p-6 sm:p-8">
+              <div className="eyebrow">Contact</div>
+              <h2 className="mt-5 max-w-xl font-display text-4xl leading-tight sm:text-5xl">
+                Open to product engineering, AI product work, and sharp collaborations.
+              </h2>
+              <p className="mt-5 max-w-xl text-sm leading-7 text-muted-foreground sm:text-base">
+                If the work involves agent systems, frontend direction, or turning rough product ideas into something real, I am
+                interested.
+              </p>
+              <Link href="mailto:khuluza0@gmail.com" className="primary-link mt-8 inline-flex">
+                Send an email
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </article>
+
+            <article className="panel p-6 sm:p-8">
+              <div className="eyebrow">Elsewhere</div>
+              <div className="mt-6 grid gap-4">
+                {links.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                    className="group flex items-center justify-between rounded-[1.5rem] border border-border/70 bg-background/75 px-5 py-4 transition duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:bg-card"
+                  >
+                    <div className="flex items-center gap-3">
+                      <item.icon className="h-4 w-4 text-signal" />
+                      <div>
+                        <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{item.label}</div>
+                        <div className="mt-1 text-sm text-foreground sm:text-base">{item.value}</div>
+                      </div>
+                    </div>
+                    <ArrowUpRight className="h-4 w-4 text-muted-foreground transition duration-300 group-hover:text-foreground" />
+                  </Link>
+                ))}
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <footer className="border-t border-border/70 py-8">
+          <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <span>© 2026 Khuluza Tshabalala</span>
+            <span className="font-mono uppercase tracking-[0.22em]">Agentic products / design systems / fast delivery</span>
           </div>
         </footer>
       </main>
-
-      <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none"></div>
     </div>
   )
 }

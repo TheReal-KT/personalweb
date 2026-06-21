@@ -5,8 +5,24 @@ import { useEffect, useState } from "react"
 export default function CircleCursor() {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState(false)
+  const [isEnabled, setIsEnabled] = useState(false)
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)")
+
+    const updateCursorSupport = () => {
+      setIsEnabled(mediaQuery.matches)
+    }
+
+    updateCursorSupport()
+    mediaQuery.addEventListener("change", updateCursorSupport)
+
+    if (!mediaQuery.matches) {
+      return () => {
+        mediaQuery.removeEventListener("change", updateCursorSupport)
+      }
+    }
+
     const updatePosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY })
     }
@@ -26,12 +42,16 @@ export default function CircleCursor() {
     return () => {
       window.removeEventListener("mousemove", updatePosition)
       window.removeEventListener("mouseover", handleMouseOver)
+      mediaQuery.removeEventListener("change", updateCursorSupport)
     }
   }, [])
 
+  if (!isEnabled) {
+    return null
+  }
+
   return (
     <>
-      {/* Main cursor circle */}
       <div
         className="fixed pointer-events-none z-50 mix-blend-difference"
         style={{
@@ -48,9 +68,8 @@ export default function CircleCursor() {
         />
       </div>
 
-      {/* Inner dot */}
       <div
-        className="fixed pointer-events-none z-50 w-1 h-1 bg-white rounded-full mix-blend-difference"
+        className="fixed pointer-events-none z-50 h-1 w-1 rounded-full bg-white mix-blend-difference"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
