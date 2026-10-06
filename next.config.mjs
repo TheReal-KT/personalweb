@@ -1,7 +1,5 @@
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  distDir: process.env.PORTFOLIO_BUILD_DIR || ".next",
   typescript: {
     ignoreBuildErrors: false,
   },
