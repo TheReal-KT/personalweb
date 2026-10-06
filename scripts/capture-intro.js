@@ -1,0 +1,25 @@
+async (page) => {
+  const previewUrl = page.url().startsWith("http://localhost:") ? new URL(page.url()).origin : "http://localhost:3001"
+  await page.emulateMedia({ reducedMotion: "no-preference" })
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto(previewUrl, { waitUntil: "domcontentloaded", timeout: 120000 })
+  await page.locator(".intro-screen").waitFor({ state: "detached" })
+  await page.getByRole("button", { name: "Replay intro" }).click()
+  await page.waitForFunction(() => Number(getComputedStyle(document.querySelector(".intro-hello > span:last-child")).opacity) > 0.95)
+  await page.screenshot({ path: "output/playwright/intro-greeting.png" })
+  await page.waitForFunction(() => { const images = Array.from(document.querySelectorAll(".intro-photo img")); return images.length === 3 && images.every((image) => image.complete && image.naturalWidth > 0) })
+  await page.waitForFunction(() => Number(getComputedStyle(document.querySelector(".intro-beach")).opacity) > 0.95)
+  await page.screenshot({ path: "output/playwright/intro-beach.png" })
+  await page.waitForFunction(() => Number(getComputedStyle(document.querySelector(".intro-heart")).opacity) > 0.95)
+  await page.screenshot({ path: "output/playwright/intro-heart.png" })
+  await page.waitForFunction(() => Number(getComputedStyle(document.querySelector(".intro-thumbs")).opacity) > 0.95)
+  await page.screenshot({ path: "output/playwright/intro-thumbs.png" })
+  await page.waitForFunction(() => Number(getComputedStyle(document.querySelector(".intro-tools > span:last-child")).opacity) > 0.95)
+  await page.screenshot({ path: "output/playwright/intro-tools.png" })
+  await page.waitForFunction(() => Number(getComputedStyle(document.querySelector(".intro-portfolio > span:last-child")).opacity) > 0.95)
+  await page.screenshot({ path: "output/playwright/intro-portfolio.png" })
+  await page.waitForFunction(() => Number(getComputedStyle(document.querySelector(".intro-welcome > span:last-child")).opacity) > 0.95)
+  await page.screenshot({ path: "output/playwright/intro-welcome.png" })
+  await page.locator(".intro-screen").waitFor({ state: "detached" })
+  return { completed: true, scrollRestored: await page.locator("body").evaluate((element) => element.style.overflow !== "hidden") }
+}

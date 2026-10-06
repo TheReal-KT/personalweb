@@ -1,18 +1,30 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist } from "next/font/google"
+import { IBM_Plex_Mono, Inter } from "next/font/google"
 import "./globals.css"
 
-const geist = Geist({
+const body = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-geist",
+  variable: "--font-body",
+})
+
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+  variable: "--font-mono",
 })
 
 export const metadata: Metadata = {
-  title: "Khuluza Tshabalala - Full Stack Developer",
-  description: "Full Stack Developer from South Africa.",
-  generator: "v0.app",
+  icons: { icon: "/icon.svg" },
+  title: "Khuluza Tshabalala | Agentic Product Builder",
+  description: "Khuluza Tshabalala is a South African full-stack product builder exploring AI agents, thoughtful software and the problems worth solving. Explore current projects and the 2026 event journal.",
+  openGraph: {
+    title: "Khuluza Tshabalala | Curious mind. Builder at heart.",
+    description: "Thoughtful digital products, AI agents and a healthy curiosity for what comes next.",
+    type: "website",
+  },
 }
 
 export default function RootLayout({
@@ -21,8 +33,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geist.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+    <html lang="en" className={`${body.variable} ${mono.variable}`}>
+      <body className="antialiased">{children}</body>
     </html>
   )
 }

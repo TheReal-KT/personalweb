@@ -1,45 +1,39 @@
-# Minimalist Portfolio Website
+# Khuluza Tshabalala — personal portfolio
 
-A clean, modern portfolio website built with Next.js and Tailwind CSS, featuring smooth animations and dark/light theme support.
+A responsive portfolio built with Next.js 15, React, TypeScript, Motion for React and MapLibre. It presents current projects, a personal introduction and a 2026 event journal.
 
-## ✨ Features
+## Development
 
-- **Minimalist Design** - Clean typography with Geist font and strategic use of whitespace
-- **Responsive Layout** - Mobile-first design that works on all devices
-- **Theme Toggle** - Seamless dark/light mode switching
-- **Smooth Animations** - Subtle scroll-triggered animations and hover effects
-- **Modern Stack** - Built with Next.js 15, TypeScript, and Tailwind CSS
+Use Node.js 22 and npm.
 
-## 🚀 Built With
-
-- [Next.js](https://nextjs.org/) - React framework
-- [TypeScript](https://www.typescriptlang.org/) - Type safety
-- [Tailwind CSS](https://tailwindcss.com/) - Styling
-- [v0.dev](https://v0.dev/) - AI-powered development
-
-## 📦 Getting Started
-
-# Install dependencies
-npm install
-
-# Run development server
+```sh
+npm ci
 npm run dev
-\`\`\`
+```
 
-Open [http://localhost:3000](http://localhost:3000) to view the portfolio.
+Open [localhost:3000](http://localhost:3000).
 
-## 🎨 Customization
+## Verification
 
-The portfolio is designed to be easily customizable:
+```sh
+npm run lint
+npm run typecheck
+npm run build
+```
 
-- Update personal information in `app/page.tsx`
-- Modify colors and styling in `app/globals.css`
-- Add or remove sections as needed
+With the preview running (currently port 3002), run the browser smoke check:
 
-## 📄 License
+```sh
+npx --yes --package @playwright/cli playwright-cli -s=portfolio-check open http://localhost:3002 --browser chrome
+npx --yes --package @playwright/cli playwright-cli -s=portfolio-check run-code --filename=scripts/verify-browser.js
+```
 
-Open source and available under the [MIT License](LICENSE).
+The check uses the open tab's localhost port. It verifies intro skip/replay/Escape, globe dragging and arrow keys, project switching, responsive overflow, mobile navigation, keyboard access, event dates, images, reduced motion and content without JavaScript.
 
----
+## Updating content
 
-**Built with ❤️ using [v0.dev](https://v0.dev) by Felix Macaspac**
+Edit `lib/portfolio.ts` for project descriptions, statuses, journal entries and social links. The upcoming Dell feature and personal copy live in `app/page.tsx`. Place images in `public/events` and update the source record in `docs/content-sources.md`.
+
+The site uses curated content rather than a live Notion connection. No Notion or Exa credentials are required at runtime.
+
+See [design language](docs/design-language.md) for the visual system, motion behavior and module boundaries, and [content sources](docs/content-sources.md) for provenance.

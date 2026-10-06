@@ -1,389 +1,97 @@
-"use client"
-
-import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
-import CircleCursor from "@/components/circle-cursor"
 import Image from "next/image"
+import { ArrowRight, ArrowUpRight, MapPin } from "lucide-react"
+import SiteNav from "@/components/site-nav"
+import Reveal from "@/components/reveal"
+import ProjectShowcase from "@/components/project-showcase"
+import WorldGlobe from "@/components/world-globe"
+import HeroSequence from "@/components/hero-sequence"
+import IntroExperience, { ReplayIntro } from "@/components/intro-experience"
+import { events, projects, socialLinks } from "@/lib/portfolio"
 
 export default function Home() {
-  const [isDark, setIsDark] = useState(true)
-  const [activeSection, setActiveSection] = useState("")
-  const sectionsRef = useRef<(HTMLElement | null)[]>([])
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark)
-  }, [isDark])
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in-up")
-            setActiveSection(entry.target.id)
-          }
-        })
-      },
-      { threshold: 0.3, rootMargin: "0px 0px -20% 0px" },
-    )
-
-    sectionsRef.current.forEach((section) => {
-      if (section) observer.observe(section)
-    })
-
-    return () => observer.disconnect()
-  }, [])
-
-  const toggleTheme = () => {
-    setIsDark(!isDark)
-  }
-
   return (
-    <div className="min-h-screen bg-background text-foreground relative">
-      <CircleCursor />
-
-      <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
-        <div className="flex flex-col gap-4">
-          {["intro", "work", "thoughts", "connect"].map((section) => (
-            <button
-              key={section}
-              onClick={() => document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })}
-              className={`w-2 h-8 rounded-full transition-all duration-500 ${
-                activeSection === section ? "bg-foreground" : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
-              }`}
-              aria-label={`Navigate to ${section}`}
-            />
-          ))}
-        </div>
-      </nav>
-
-      <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
-        <header
-          id="intro"
-          ref={(el) => {
-            sectionsRef.current[0] = el
-          }}
-          className="min-h-screen flex items-center opacity-0"
-        >
-          <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
-            <div className="lg:col-span-3 space-y-6 sm:space-y-8">
-              <div className="space-y-3 sm:space-y-2">
-                <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
-                <div className="flex items-center gap-6">
-                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-border overflow-hidden flex-shrink-0 bg-muted">
-                    <Image src="/KT_suit.jpg" alt="Khuluza Tshabalala" fill className="object-cover" sizes="80px" priority />
-                  </div>
-                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
-                    Khuluza
-                    <br />
-                    <span className="text-muted-foreground">Tshabalala</span>
-                  </h1>
-                </div>
-              </div>
-
-              <div className="space-y-6 max-w-md">
-                <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                  Full-Stack Developer building wonderful applications to do wonderful things
-                  <span className="text-foreground"> design</span>,<span className="text-foreground"> technology</span>,
-                  and
-                  <span className="text-foreground"> user experience</span>.
-                </p>
-
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    Available for work
-                  </div>
-                  <div>South Africa</div>
-                </div>
-              </div>
+    <IntroExperience>
+      <a href="#main" className="skip-link">Skip to content</a>
+      <SiteNav />
+      <main id="main">
+        <section id="home" className="hero" aria-labelledby="hero-title">
+          <HeroSequence>
+          <div className="hero-copy">
+            <a href="#up-next" className="hero-label">Next stop: Dell Forum · 03 November 2026 <ArrowUpRight size={12} /></a>
+            <h1 id="hero-title"><span className="hero-line">Curious mind.</span><span className="hero-line">Builder at heart.</span></h1>
+            <p className="hero-intro">Hi, I’m Khuluza. I build thoughtful digital products.<br className="desktop-break" /> Full-stack engineering, AI agents, and a healthy<br className="desktop-break" /> curiosity for what comes next.</p>
+            <div className="hero-actions">
+              <a href="#work" className="button button-orange">Explore my work <ArrowRight size={18} /></a>
             </div>
-
-            <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
-              <div className="space-y-4">
-                <div className="text-sm text-muted-foreground font-mono">CURRENTLY</div>
-                <div className="space-y-2">
-                  <div className="text-foreground">Full Stack Developer</div>
-                  <div className="text-xs text-muted-foreground">2024 — Present</div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="text-sm text-muted-foreground font-mono">FOCUS</div>
-                <div className="flex flex-wrap gap-2">
-                  {["React", "TypeScript", "Node.js", "Vercel", "Next.js", "Supabase"].map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-colors duration-300"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <div className="hero-location"><span><i className="status-dot" /><strong>5</strong> projects in motion</span><span><i className="status-dot dot-blue" />South Africa</span></div>
           </div>
-        </header>
-
-        <section
-          id="work"
-          ref={(el) => {
-            sectionsRef.current[1] = el
-          }}
-          className="min-h-screen py-20 sm:py-32 opacity-0"
-        >
-          <div className="space-y-12 sm:space-y-16">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <h2 className="text-3xl sm:text-4xl font-light">Selected Work</h2>
-              <div className="text-sm text-muted-foreground font-mono">2024 — 2025</div>
-            </div>
-
-            <div className="space-y-8 sm:space-y-12">
-              {[
-                {
-                  year: "2025",
-                  role: "Hackathon Participant",
-                  company: "Tech Innovation Summit",
-                  description:
-                    "Competed in a 48-hour hackathon, building innovative solutions with a cross-functional team.",
-                  tech: ["React", "Next.js", "AI SDK"],
-                },
-                {
-                  year: "2024",
-                  role: "Software Engineer",
-                  company: "Journey Begins",
-                  description:
-                    "Started my software engineering journey, learning modern web development and building real-world projects.",
-                  tech: ["JavaScript", "React", "TypeScript"],
-                },
-              ].map((job, index) => (
-                <div
-                  key={index}
-                  className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-border transition-colors duration-500"
-                >
-                  <div className="lg:col-span-2">
-                    <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
-                      {job.year}
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-6 space-y-3">
-                    <div>
-                      <h3 className="text-lg sm:text-xl font-medium">{job.role}</h3>
-                      <div className="text-muted-foreground">{job.company}</div>
-                    </div>
-                    <p className="text-muted-foreground leading-relaxed max-w-lg">{job.description}</p>
-                  </div>
-
-                  <div className="lg:col-span-4 flex flex-wrap gap-2 lg:justify-end mt-2 lg:mt-0">
-                    {job.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-colors duration-500"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="hero-world">
+            <WorldGlobe />
+          </div>
+          </HeroSequence>
+          <div className="now-strip page-width">
+            <div><span className="small-label">Currently</span><p><span className="status-dot" />Building BLVNK <span className="muted">& exploring agent systems</span></p></div>
+            <a href="#up-next"><span className="small-label">Up next / 03 Nov 2026</span><p>Dell Technologies Forum <ArrowUpRight size={17} /></p></a>
+            <span className="strip-edition small-label">Portfolio<br />Edition 2026</span>
           </div>
         </section>
 
-        <section
-          id="thoughts"
-          ref={(el) => {
-            sectionsRef.current[2] = el
-          }}
-          className="min-h-screen py-20 sm:py-32 opacity-0"
-        >
-          <div className="space-y-12 sm:space-y-16">
-            <h2 className="text-3xl sm:text-4xl font-light">Recent Thoughts</h2>
+        <section id="work" className="work-section page-width" aria-labelledby="work-title">
+          <Reveal className="section-heading"><div><p className="eyebrow">01 / Selected work</p><h2 id="work-title">Ideas, made real.</h2></div><p>A few things I’m building, questioning,<br className="desktop-break" /> and figuring out along the way.</p></Reveal>
+          <Reveal><ProjectShowcase projects={projects} /></Reveal>
+          <p className="work-footnote"><span>Always a work in progress.</span><span>Products / Agents / Research</span></p>
+        </section>
 
-            <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
-              {[
-                {
-                  title: "The Future of Web Development",
-                  excerpt: "Exploring how AI and automation are reshaping the way we build for the web.",
-                  date: "Dec 2024",
-                  readTime: "5 min",
-                },
-                {
-                  title: "Design Systems at Scale",
-                  excerpt: "Lessons learned from building and maintaining design systems across multiple products.",
-                  date: "Nov 2024",
-                  readTime: "8 min",
-                },
-                {
-                  title: "Performance-First Development",
-                  excerpt: "Why performance should be a first-class citizen in your development workflow.",
-                  date: "Oct 2024",
-                  readTime: "6 min",
-                },
-                {
-                  title: "The Art of Code Review",
-                  excerpt: "Building better software through thoughtful and constructive code reviews.",
-                  date: "Sep 2024",
-                  readTime: "4 min",
-                },
-              ].map((post, index) => (
-                <article
-                  key={index}
-                  className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
-                      <span>{post.date}</span>
-                      <span>{post.readTime}</span>
-                    </div>
+        <section id="about" className="about-section" aria-labelledby="about-title">
+          <div className="about-layout page-width">
+            <Reveal className="portrait-column">
+              <div className="portrait-frame"><Image src="/KT_suit.jpg" alt="Khuluza Tshabalala in a navy suit" fill unoptimized loading="eager" sizes="(min-width: 900px) 420px, 85vw" className="portrait-image" /></div>
+              <div className="portrait-caption"><span>Khuluza Tshabalala</span><span>Engineer. Builder. Always learning.</span></div>
+            </Reveal>
+            <Reveal className="about-copy" delay={0.1}>
+              <p className="eyebrow">02 / The person behind the projects</p>
+              <h2 id="about-title">Good work starts<br />with good questions.</h2>
+              <p>I’m a full-stack product builder based in South Africa, working at the intersection of software, AI and the everyday problems worth solving.</p>
+              <p>I care about how things work, how they feel, and whether they actually help someone. That takes curiosity, clear thinking, and a willingness to keep learning.</p>
+              <div className="about-principles"><div><span>01</span><p>Understand the problem.</p></div><div><span>02</span><p>Make the complex feel clear.</p></div><div><span>03</span><p>Build. Learn. Keep going.</p></div></div>
+              <a href="https://www.linkedin.com/in/khuluza-tshabalala-933161288/" target="_blank" rel="noreferrer" className="text-link">A little more about me <ArrowUpRight size={16} /></a>
+            </Reveal>
+          </div>
+        </section>
 
-                    <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
-                      {post.title}
-                    </h3>
-
-                    <p className="text-muted-foreground leading-relaxed">{post.excerpt}</p>
-
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                      <span>Read more</span>
-                      <svg
-                        className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </div>
-                  </div>
+        <section id="journal" className="journal-section page-width" aria-labelledby="journal-title">
+          <Reveal className="section-heading"><div><p className="eyebrow">03 / Out in the world</p><h2 id="journal-title">Different rooms.<br />New perspectives.</h2></div><p>The journey goes beyond the screen.<br className="desktop-break" /> Here’s where I’ve been in 2026.</p></Reveal>
+          <div className="event-grid">
+            {events.map((event, index) => (
+              <Reveal key={event.name} delay={index * 0.1}>
+                <article className="event-entry">
+                  <a className="event-image-link" href={event.source} target="_blank" rel="noreferrer" aria-label={`${event.name}: official event coverage`}>
+                    <Image src={event.image} alt={event.alt} fill unoptimized loading="eager" sizes="(min-width: 900px) 560px, 90vw" className="event-image" />
+                    <span className="event-badge">Attended / 2026</span><span className="image-arrow"><ArrowUpRight size={20} /></span>
+                  </a>
+                  <div className="event-meta"><time dateTime={event.dateTime}>{event.date}</time><span>{event.category}</span></div>
+                  <h3>{event.name}</h3>
+                  <p className="event-venue"><MapPin size={14} />{event.venue}</p>
+                  <p className="event-description">{event.description}</p>
+                  <a className="event-credit" href={event.source} target="_blank" rel="noreferrer">{event.credit} <ArrowUpRight size={12} /></a>
                 </article>
-              ))}
-            </div>
+              </Reveal>
+            ))}
           </div>
+          <Reveal>
+            <article id="up-next" className="up-next" aria-labelledby="next-title">
+              <div className="next-image"><Image src="/events/dell-forum-2026.jpg" alt="Dell Technologies Forum Johannesburg 2026 promotional artwork" fill unoptimized loading="eager" sizes="(min-width: 900px) 580px, 90vw" /></div>
+              <div className="next-copy"><p className="eyebrow"><span className="status-dot" />Up next / Planning to attend</p><h3 id="next-title">See you at<br />Dell Technologies<br /><span className="serif-word">Forum.</span></h3><p className="next-date"><time dateTime="2026-11-03">03 November 2026</time><span>Kyalami Grand Prix Circuit, Johannesburg</span></p><p>Next on the calendar: a day exploring AI, modern infrastructure and the conversations connecting them.</p><a href="https://techcentral.co.za/dell-technologies-forum-2026-johannesburg/286759/" target="_blank" rel="noreferrer" className="text-link">Explore the event <ArrowUpRight size={16} /></a><span className="next-credit">Promotional imagery · Dell Technologies / TechCentral</span></div>
+            </article>
+          </Reveal>
         </section>
 
-        <section
-          id="connect"
-          ref={(el) => {
-            sectionsRef.current[3] = el
-          }}
-          className="py-20 sm:py-32 opacity-0"
-        >
-          <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
-            <div className="space-y-6 sm:space-y-8">
-              <h2 className="text-3xl sm:text-4xl font-light">Let's Connect</h2>
-
-              <div className="space-y-6">
-                <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                  Always interested in new opportunities, collaborations, and conversations about technology and design.
-                </p>
-
-                <div className="space-y-4">
-                  <Link
-                    href="mailto:test@example.com"
-                    className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
-                  >
-                    <span className="text-base sm:text-lg">khuluza0@gmail.com</span>
-                    <svg
-                      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-6 sm:space-y-8">
-              <div className="text-sm text-muted-foreground font-mono">ELSEWHERE</div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { name: "GitHub", handle: "TheReal-KT", url: "https://github.com/TheReal-KT" },
-                  { name: "LinkedIn", handle: "Khuluza Tshabalala", url: "https://www.linkedin.com/in/khuluza-tshabalala-933161288/" },
-                ].map((social) => (
-                  <Link
-                    key={social.name}
-                    href={social.url}
-                    className="group p-4 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
-                  >
-                    <div className="space-y-2">
-                      <div className="text-foreground group-hover:text-muted-foreground transition-colors duration-300">
-                        {social.name}
-                      </div>
-                      <div className="text-sm text-muted-foreground">{social.handle}</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+        <section id="contact" className="contact-section" aria-labelledby="contact-title">
+          <Reveal className="contact-content page-width"><p className="eyebrow">04 / Make a connection</p><h2 id="contact-title">Something on<br />your mind?</h2><p>A project, a conversation, or an interesting problem.<br />I’d love to hear about it.</p><a href="mailto:khuluza0@gmail.com" className="button button-orange">Let’s talk <ArrowUpRight size={18} /></a><a href="mailto:khuluza0@gmail.com" className="contact-email">khuluza0@gmail.com</a></Reveal>
+          <div className="contact-decoration" aria-hidden="true">↗</div>
         </section>
-
-        <footer className="py-12 sm:py-16 border-t border-border">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8">
-            <div className="space-y-2">
-              <div className="text-sm text-muted-foreground">© 2025 Khuluza Tshabalala. All rights reserved.</div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <button
-                onClick={toggleTheme}
-                className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
-                aria-label="Toggle theme"
-              >
-                {isDark ? (
-                  <svg
-                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                  </svg>
-                )}
-              </button>
-
-              <button className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300">
-                <svg
-                  className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </footer>
       </main>
-
-      <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none"></div>
-    </div>
+      <footer className="site-footer page-width"><a href="#home" className="wordmark" aria-label="Back to top">kt<span>.</span></a><p>© 2026 Khuluza Tshabalala</p><div>{socialLinks.map((link) => <a key={link.label} href={link.href} target="_blank" rel="noreferrer">{link.label} <ArrowUpRight size={13} /></a>)}<ReplayIntro /><a href="#home">Back to top <ArrowUpRight size={13} /></a></div></footer>
+    </IntroExperience>
   )
 }
