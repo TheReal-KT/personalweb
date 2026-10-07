@@ -116,6 +116,8 @@ section { scroll-margin-top: 105px; }
 .github-link { margin-top: 22px; }
 .project-detail { min-width: 0; min-height: 610px; }
 .project-art { overflow: hidden; position: relative; aspect-ratio: 1.75; border-radius: 18px; display: flex; flex-direction: column; justify-content: space-between; padding: 30px; isolation: isolate; }
+.project-art.project-art-image { padding: 0; aspect-ratio: auto; display: block; }
+.project-image { display: block; width: 100%; height: auto; }
 .tone-blue { background: #e1edf7; color: #173451; }
 .tone-orange { background: #ffe4d4; color: #813d18; }
 .tone-green { background: #e3f0df; color: #294832; }
@@ -155,7 +157,7 @@ section { scroll-margin-top: 105px; }
 .journal-section { padding-top: 95px; padding-bottom: 100px; }
 .event-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
 .event-image-link { display: block; position: relative; aspect-ratio: 1.6; border-radius: 18px; overflow: hidden; background: #e5e5e5; }
-.event-image { object-fit: cover; transition: transform 0.5s; }
+.event-image { background: #f1f3f4; transition: transform 0.5s; }
 .event-image-link:hover .event-image { transform: scale(1.035); }
 .event-badge { position: absolute; top: 16px; left: 16px; padding: 8px 12px; border-radius: 100px; font-size: 10px; font-weight: 650; color: var(--ink); background: #fff; }
 .image-arrow { display: flex; justify-content: center; align-items: center; position: absolute; bottom: 16px; right: 16px; border-radius: 50%; width: 38px; height: 38px; background: #fff; }

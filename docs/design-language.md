@@ -14,7 +14,7 @@ A personal portfolio closely following the context-con reference: a floating bla
 - Structure: open chapters, thin dividers, a project index with one focused detail panel, two journal entries, and an upcoming-event feature.
 - Photography: the existing portrait, organizer event photography and promotional artwork. Each event links to the source and identifies the image's origin.
 
-The three event assets are already compressed local files (about 152 KB combined) and are served directly, along with the compact formal portrait (52 KB). The greeting photographs use Next.js image optimization.
+The three event assets are compressed local files and are served directly, along with the compact formal portrait (52 KB). The greeting photographs and user-supplied project screenshots use Next.js image optimization. Project screenshot cards follow their images' natural proportions, filling the frames without empty bands or cropping. The Google Cloud Summit brand artwork is shown in full within its event frame.
 
 ## Motion
 

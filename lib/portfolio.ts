@@ -8,6 +8,7 @@ export type Project = {
   headline: string[]
   steps: string[]
   tone: "blue" | "green" | "orange" | "ink"
+  image?: { src: string; alt: string; width: number; height: number }
 }
 
 export const projects: Project[] = [
@@ -21,6 +22,7 @@ export const projects: Project[] = [
     headline: ["Less chasing.", "More clarity."],
     steps: ["Reconcile", "Review", "Resolve"],
     tone: "blue",
+    image: { src: "/projects/blvnk-landing.png", alt: "BLVNK landing page describing tax intelligence and the next practical action for South African accounting firms", width: 1600, height: 861 },
   },
   {
     id: "friday",
@@ -43,6 +45,7 @@ export const projects: Project[] = [
     headline: ["See the system.", "Steer the work."],
     steps: ["Observe", "Inspect", "Understand"],
     tone: "ink",
+    image: { src: "/projects/draft-dashboard.png", alt: "DRAFT light dashboard with continued learning, an AI Engineer idea, tool integration and a focus snapshot", width: 1600, height: 951 },
   },
   {
     id: "cost-control",
@@ -65,6 +68,7 @@ export const projects: Project[] = [
     headline: ["Research first.", "Decisions second."],
     steps: ["Research", "Validate", "Review"],
     tone: "blue",
+    image: { src: "/projects/outcome.png", alt: "OUTCOME landing page with the headline Less noise, More perspective, Your kind of clarity", width: 1600, height: 899 },
   },
 ]
 
@@ -81,10 +85,11 @@ export const events = [
     venue: "Sandton Convention Centre",
     category: "Cloud / AI / Africa",
     description: "Building for Africa. A meeting point for cloud technology, agentic AI and the people shaping what comes next.",
-    image: "/events/google-cloud-2026.webp",
-    alt: "Google Cloud leaders and guests at the 2026 Johannesburg summit",
-    source: "https://blog.google/intl/en-africa/company-news/outreach-and-initiatives/accelerating-africas-digital-renaissance-by-investing-in-infrastructure-and-agentic-ai/",
-    credit: "Event photography · Google",
+    image: "/events/google-cloud-summit-2026.webp",
+    alt: "Google Cloud Summit Johannesburg promotional artwork for 1 July 2026",
+    imageFit: "contain" as const,
+    source: "https://cloudonair.withgoogle.com/events/google-cloud-summit-johannesburg-26",
+    credit: "Promotional artwork · Google Cloud",
   },
   {
     name: "AWS Summit Johannesburg",
@@ -95,6 +100,7 @@ export const events = [
     description: "A day around the possibilities of cloud and AI, from agentic systems to the infrastructure that makes them work.",
     image: "/events/aws-summit-2026.jpg",
     alt: "Promotional artwork for AWS Summit Johannesburg 2026",
+    imageFit: "cover" as const,
     source: "https://aws.amazon.com/events/summits/johannesburg/",
     credit: "Event imagery · AWS",
   },

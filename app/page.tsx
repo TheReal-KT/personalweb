@@ -23,7 +23,7 @@ export default function Home() {
             <div className="hero-actions">
               <a href="#work" className="button button-orange">Explore my work <ArrowRight size={18} /></a>
             </div>
-            <div className="hero-location"><span><i className="status-dot" /><strong>5</strong> projects in motion</span><span><i className="status-dot dot-blue" />South Africa</span></div>
+            <div className="hero-location"><span><i className="status-dot" /><strong>{projects.length}</strong> projects in motion</span><span><i className="status-dot dot-blue" />South Africa</span></div>
           </div>
           <div className="hero-world">
             <WorldGlobe />
@@ -66,7 +66,7 @@ export default function Home() {
               <Reveal key={event.name} delay={index * 0.1}>
                 <article className="event-entry">
                   <a className="event-image-link" href={event.source} target="_blank" rel="noreferrer" aria-label={`${event.name}: official event coverage`}>
-                    <Image src={event.image} alt={event.alt} fill unoptimized loading="eager" sizes="(min-width: 900px) 560px, 90vw" className="event-image" />
+                    <Image src={event.image} alt={event.alt} fill unoptimized loading="eager" sizes="(min-width: 900px) 560px, 90vw" className="event-image" style={{ objectFit: event.imageFit }} />
                     <span className="event-badge">Attended / 2026</span><span className="image-arrow"><ArrowUpRight size={20} /></span>
                   </a>
                   <div className="event-meta"><time dateTime={event.dateTime}>{event.date}</time><span>{event.category}</span></div>

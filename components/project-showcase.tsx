@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { ArrowRight, ArrowUpRight } from "lucide-react"
 import type { Project } from "@/lib/portfolio"
@@ -27,11 +28,17 @@ export default function ProjectShowcase({ projects }: { projects: Project[] }) {
         <AnimatePresence mode="wait" initial={false}>
           <motion.article key={project.id} initial={reducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: reducedMotion ? 0 : 0.22 }}>
-            <div className={`project-art tone-${project.tone}`}>
-              <div className="art-top"><span>{project.name}<span className="art-dot">.</span></span><span className="small-label">Concept / workflow</span></div>
-              <div className="art-headline">{project.headline.map((line) => <span key={line}>{line}</span>)}</div>
-              <div className="workflow-strip">{project.steps.map((step, index) => <span key={step}><i>0{index + 1}</i>{step}{index < project.steps.length - 1 && <ArrowRight size={15} aria-hidden="true" />}</span>)}</div>
-              <div className="art-orbit" aria-hidden="true" />
+            <div className={`project-art ${project.image ? "project-art-image" : `tone-${project.tone}`}`}>
+              {project.image ? (
+                <Image src={project.image.src} alt={project.image.alt} width={project.image.width} height={project.image.height} sizes="(min-width: 900px) 720px, (min-width: 601px) 65vw, 90vw" className="project-image" />
+              ) : (
+                <>
+                  <div className="art-top"><span>{project.name}<span className="art-dot">.</span></span><span className="small-label">Concept / workflow</span></div>
+                  <div className="art-headline">{project.headline.map((line) => <span key={line}>{line}</span>)}</div>
+                  <div className="workflow-strip">{project.steps.map((step, index) => <span key={step}><i>0{index + 1}</i>{step}{index < project.steps.length - 1 && <ArrowRight size={15} aria-hidden="true" />}</span>)}</div>
+                  <div className="art-orbit" aria-hidden="true" />
+                </>
+              )}
             </div>
             <div className="project-description">
               <span className="project-status"><span className="status-dot" />{project.status}</span>

@@ -24,9 +24,13 @@ Attendance at Google Cloud and AWS, and intention to attend Dell, come from the 
 
 The greeting photos in `public/intro` were supplied directly by Khuluza: the beach photograph, heart gesture and thumbs-up portrait. The filenames are normalized for web URLs; the originals remain unchanged.
 
+## Project screenshots
+
+On 7 October 2026, Khuluza supplied screenshots for BLVNK, DRAFT and OUTCOME, then replaced the first two with the BLVNK landing page and DRAFT light dashboard. The latest attachments are stored unchanged in `public/projects/blvnk-landing.png`, `public/projects/draft-dashboard.png` and `public/projects/outcome.png`. Next.js optimizes the displayed images; the showcase preserves each screenshot's proportions and complete contents. Friday and Cost Control remain in selected work with their existing concept artwork, as requested.
+
 ## Local event assets
 
-- `public/events/google-cloud-2026.webp`: [Google-hosted event photograph](https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Screenshot_2026-07-01_at_14.24.04.width-900.format-webp.webp).
+- `public/events/google-cloud-summit-2026.webp`: official Johannesburg Summit brand artwork from the [Google Cloud OnAir event page](https://cloudonair.withgoogle.com/events/google-cloud-summit-johannesburg-26), downloaded from its [Google-hosted promotional asset](https://cloudonair.withgoogle.com/api/assets?path=/gs/gweb-gc-gather-production.appspot.com/files/a2b2e228-10a0-4ea3-a45c-5d10c48bb21c) on 7 October 2026 and compressed to WebP.
 - `public/events/aws-summit-2026.jpg`: [AWS-hosted Johannesburg promotional artwork](https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/events/approved/summits-2026/Thumbnail-Image-Landing-Page-Johannesburg_Final.577845d1d84a17b8dd07dc46acd2a9aae12532be.jpg).
 - `public/events/dell-forum-2026.jpg`: [Dell promotional artwork from TechCentral](https://techcentral.co.za/wp-content/uploads/2026/10/dell-tech-forum-joburg-1078.jpg).
 

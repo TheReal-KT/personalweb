@@ -4,6 +4,14 @@ async (page) => {
   const previewUrl = page.url().startsWith("http://localhost:") ? new URL(page.url()).origin : "http://localhost:3001"
   const failures = []
   const assert = (condition, message) => { if (!condition) failures.push(message) }
+  const assertScreenshotFit = async (name) => {
+    assert(await page.locator("#project-detail img").evaluate((image) => {
+      const bounds = image.getBoundingClientRect()
+      const frame = image.parentElement.getBoundingClientRect()
+      return bounds.width > 0 && Math.abs(bounds.width - frame.width) < 1 && Math.abs(bounds.height - frame.height) < 1
+        && Math.abs(bounds.height - bounds.width * image.naturalHeight / image.naturalWidth) < 1
+    }), `${name} screenshot does not fill its card or has distorted proportions`)
+  }
   const errors = []
   page.on("pageerror", (error) => errors.push(error.message))
   await page.emulateMedia({ reducedMotion: "no-preference" })
@@ -22,12 +30,31 @@ async (page) => {
   await page.locator(".intro-screen").waitFor({ state: "detached" })
 
   const projectButtons = page.getByRole("group", { name: "Choose a project" }).getByRole("button")
-  assert(await projectButtons.count() === 5, "Expected five project choices")
+  const expectedProjects = ["BLVNK", "Friday", "DRAFT", "Cost Control", "OUTCOME"]
+  const expectedImages = {
+    BLVNK: "/projects/blvnk-landing.png",
+    DRAFT: "/projects/draft-dashboard.png",
+    OUTCOME: "/projects/outcome.png",
+  }
+  assert(JSON.stringify(await projectButtons.locator(".project-name").allTextContents()) === JSON.stringify(expectedProjects), "Expected all five original projects in order")
+  assert(await page.locator(".hero-location strong").innerText() === "5", "Hero project count is stale")
   for (let index = 0; index < await projectButtons.count(); index++) {
     const button = projectButtons.nth(index)
     const name = await button.locator(".project-name").innerText()
     await button.click()
-    await page.waitForFunction((expectedName) => document.querySelector("#project-detail .art-top")?.textContent?.includes(expectedName), name)
+    if (expectedImages[name]) {
+      await page.waitForFunction((expectedName) => {
+        const image = document.querySelector("#project-detail img")
+        return image?.alt.startsWith(expectedName) && image.complete && image.naturalWidth > 0
+      }, name)
+      const projectImage = page.locator("#project-detail img")
+      const imageUrl = new URL(await projectImage.getAttribute("src"), previewUrl)
+      assert((imageUrl.searchParams.get("url") ?? imageUrl.pathname) === expectedImages[name], `Incorrect screenshot assigned to ${name}`)
+      await assertScreenshotFit(name)
+    } else {
+      await page.waitForFunction((expectedName) => document.querySelector("#project-detail .art-top")?.textContent?.includes(expectedName), name)
+      assert(await page.locator("#project-detail .workflow-strip").isVisible(), `${name} concept artwork missing`)
+    }
     assert(await button.getAttribute("aria-pressed") === "true", `Project ${index + 1} selection not exposed`)
     assert(await page.locator("#project-detail h3").innerText() !== "", `Project ${index + 1} has no description`)
     assert(await page.locator('.project-select[aria-pressed="true"]').count() === 1, "More than one project selected")
@@ -65,6 +92,14 @@ async (page) => {
 
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 })
+    for (const name of Object.keys(expectedImages)) {
+      await projectButtons.filter({ hasText: name }).click()
+      await page.waitForFunction((expectedName) => {
+        const image = document.querySelector("#project-detail img")
+        return image?.alt.startsWith(expectedName) && image.complete && image.naturalWidth > 0
+      }, name)
+      await assertScreenshotFit(`${name} at ${width}px`)
+    }
     const dimensions = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, viewport: window.innerWidth }))
     assert(dimensions.content <= dimensions.viewport, `Horizontal overflow at ${width}px`)
   }
@@ -83,6 +118,9 @@ async (page) => {
   assert(page.url().endsWith("#journal"), "Journal anchor failed")
 
   assert(await page.locator('.event-entry time[datetime="2026-07-01"]').count() === 1, "Google date missing")
+  const summitImage = page.getByRole("img", { name: "Google Cloud Summit Johannesburg promotional artwork for 1 July 2026" })
+  assert(await summitImage.getAttribute("src") === "/events/google-cloud-summit-2026.webp", "Google Summit brand image missing")
+  assert(await summitImage.evaluate((image) => getComputedStyle(image).objectFit) === "contain", "Google Summit artwork is cropped")
   assert(await page.locator('.event-entry time[datetime="2026-08-19"]').count() === 1, "AWS date missing")
   assert(await page.locator('#up-next time[datetime="2026-11-03"]').count() === 1, "Dell date missing")
   assert(await page.locator('a[href="mailto:khuluza0@gmail.com"]').count() > 0, "Email contact missing")
@@ -114,5 +152,5 @@ async (page) => {
     await context.close()
   }
   if (failures.length) throw new Error(failures.join("\n"))
-  return { passed: true, projects: 5, widths: [1440, 768, 390, 320], checks: ["intro skip/replay/Escape", "manual globe drag/keyboard", "selection", "navigation", "keyboard", "dates", "contact", "images", "reduced motion", "browser errors"] }
+  return { passed: true, projects: expectedProjects.length, widths: [1440, 768, 390, 320], checks: ["intro skip/replay/Escape", "manual globe drag/keyboard", "selection and screenshot mapping", "navigation", "keyboard", "dates", "contact", "images and Summit branding", "reduced motion", "browser errors"] }
 }
